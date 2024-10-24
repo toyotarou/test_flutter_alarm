@@ -102,45 +102,75 @@ class _HomeScreenState extends State<HomeScreen> {
       //
 
       body: SafeArea(
-        child: ListView(
-          // ignore: always_specify_types
-          children: List.generate(
-            alarms.length,
-            (int index) => ListTile(
-              title: Text(alarms[index].dateTime.toString()),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ListView(
+                // ignore: always_specify_types
+                children: List.generate(
+                  alarms.length,
+                  (int index) => ListTile(
+                    title: Text(alarms[index].dateTime.toString()),
+                  ),
+                ),
+              ),
             ),
-          ),
+            ElevatedButton(
+              onPressed: () async {
+                final DateTime alarmDateTime =
+                    DateTime.now().add(const Duration(seconds: 10));
+
+                final AlarmSettings alarmSettings = AlarmSettings(
+                  id: 42,
+                  dateTime: alarmDateTime,
+                  assetAudioPath: 'assets/blank.mp3',
+                  // ignore: avoid_redundant_argument_values
+                  loopAudio: true,
+                  // ignore: avoid_redundant_argument_values
+                  vibrate: true,
+                  volume: 0.8,
+                  fadeDuration: 3.0,
+                  notificationSettings: const NotificationSettings(
+                    title: 'This is the title',
+                    body: 'This is the body',
+                  ),
+                );
+
+                await Alarm.set(alarmSettings: alarmSettings);
+
+                loadAlarms();
+              },
+              child: const Text('10s'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final DateTime alarmDateTime =
+                    DateTime.now().add(const Duration(seconds: 20));
+
+                final AlarmSettings alarmSettings = AlarmSettings(
+                  id: 99,
+                  dateTime: alarmDateTime,
+                  assetAudioPath: 'assets/blank.mp3',
+                  // ignore: avoid_redundant_argument_values
+                  loopAudio: true,
+                  // ignore: avoid_redundant_argument_values
+                  vibrate: true,
+                  volume: 0.8,
+                  fadeDuration: 3.0,
+                  notificationSettings: const NotificationSettings(
+                    title: 'This is the title',
+                    body: 'This is the body',
+                  ),
+                );
+
+                await Alarm.set(alarmSettings: alarmSettings);
+
+                loadAlarms();
+              },
+              child: const Text('20s'),
+            ),
+          ],
         ),
-      ),
-
-      //
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final DateTime alarmDateTime =
-              DateTime.now().add(const Duration(seconds: 10));
-
-          final AlarmSettings alarmSettings = AlarmSettings(
-            id: 42,
-            dateTime: alarmDateTime,
-            assetAudioPath: 'assets/blank.mp3',
-            // ignore: avoid_redundant_argument_values
-            loopAudio: true,
-            // ignore: avoid_redundant_argument_values
-            vibrate: true,
-            volume: 0.8,
-            fadeDuration: 3.0,
-            notificationSettings: const NotificationSettings(
-              title: 'This is the title',
-              body: 'This is the body',
-            ),
-          );
-
-          await Alarm.set(alarmSettings: alarmSettings);
-
-          loadAlarms();
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }
