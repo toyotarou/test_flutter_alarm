@@ -22,6 +22,8 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
           children: <Widget>[
             const Text('Alram is ringing.......'),
 
+            Text(widget.alarmSettings.id.toString()),
+
             Text(widget.alarmSettings.notificationSettings.title),
 
             Text(widget.alarmSettings.notificationSettings.body),

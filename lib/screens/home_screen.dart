@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../extensions/extensions.dart';
 import 'alarm_notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -115,64 +116,80 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                final DateTime alarmDateTime =
-                    DateTime.now().add(const Duration(seconds: 10));
+            Row(
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () async {
+                    final DateTime alarmDateTime =
+                        DateTime.now().add(const Duration(seconds: 10));
 
-                final AlarmSettings alarmSettings = AlarmSettings(
-                  id: 42,
-                  dateTime: alarmDateTime,
-                  assetAudioPath: 'assets/blank.mp3',
-                  // ignore: avoid_redundant_argument_values
-                  loopAudio: true,
-                  // ignore: avoid_redundant_argument_values
-                  vibrate: true,
-                  volume: 0.8,
-                  fadeDuration: 3.0,
-                  notificationSettings: const NotificationSettings(
-                    title: 'This is the title',
-                    body: 'This is the body',
-                  ),
-                );
+                    setAlarm(alarmId: 1, alarmDateTime: alarmDateTime);
+                  },
+                  child: const Text('10s'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () async {
+                    final DateTime alarmDateTime =
+                        DateTime.now().add(const Duration(seconds: 20));
 
-                await Alarm.set(alarmSettings: alarmSettings);
-
-                loadAlarms();
-              },
-              child: const Text('10s'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final DateTime alarmDateTime =
-                    DateTime.now().add(const Duration(seconds: 20));
-
-                final AlarmSettings alarmSettings = AlarmSettings(
-                  id: 99,
-                  dateTime: alarmDateTime,
-                  assetAudioPath: 'assets/blank.mp3',
-                  // ignore: avoid_redundant_argument_values
-                  loopAudio: true,
-                  // ignore: avoid_redundant_argument_values
-                  vibrate: true,
-                  volume: 0.8,
-                  fadeDuration: 3.0,
-                  notificationSettings: const NotificationSettings(
-                    title: 'This is the title',
-                    body: 'This is the body',
-                  ),
-                );
-
-                await Alarm.set(alarmSettings: alarmSettings);
-
-                loadAlarms();
-              },
-              child: const Text('20s'),
+                    setAlarm(alarmId: 2, alarmDateTime: alarmDateTime);
+                  },
+                  child: const Text('20s'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () async {
+                    for (final Map<String, Object> element
+                        in <Map<String, Object>>[
+                      <String, Object>{
+                        'id': 1,
+                        'time': DateTime.now().add(const Duration(seconds: 10))
+                      },
+                      <String, Object>{
+                        'id': 2,
+                        'time': DateTime.now().add(const Duration(seconds: 20))
+                      },
+                    ]) {
+                      setAlarm(
+                        alarmId: element['id'].toString().toInt(),
+                        alarmDateTime:
+                            DateTime.parse(element['time'].toString()),
+                      );
+                    }
+                  },
+                  child: const Text('renzoku'),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  ///
+  Future<void> setAlarm(
+      {required int alarmId, required DateTime alarmDateTime}) async {
+    final AlarmSettings alarmSettings = AlarmSettings(
+      id: alarmId,
+      dateTime: alarmDateTime,
+      assetAudioPath: 'assets/blank.mp3',
+      // ignore: avoid_redundant_argument_values
+      loopAudio: true,
+      // ignore: avoid_redundant_argument_values
+      vibrate: true,
+      volume: 0.8,
+      fadeDuration: 3.0,
+      notificationSettings: const NotificationSettings(
+        title: 'This is the title',
+        body: 'This is the body',
+      ),
+    );
+
+    await Alarm.set(alarmSettings: alarmSettings);
+
+    loadAlarms();
   }
 
   ///
